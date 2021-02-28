@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const path = require('path');
 
 const express = require('express');
@@ -17,12 +19,12 @@ const createWeatherClient = (() => {
     return {
         getCityConditions: cityKey => ({
             ...options,
-            url: `http://dataservice.accuweather.com/currentconditions/v1/${cityKey}?apikey=vlawhhixjBTyTI7AnoOFlaAmhSEYjqfa`
+            url: `http://dataservice.accuweather.com/currentconditions/v1/${cityKey}?apikey=${process.env.API_KEY}`
         }),
 
         getLocationKey: city => ({ 
             ...options,
-            url: `http://dataservice.accuweather.com/locations/v1/cities/search?apikey=vlawhhixjBTyTI7AnoOFlaAmhSEYjqfa&q=${city}`
+            url: `http://dataservice.accuweather.com/locations/v1/cities/search?apikey=${process.env.API_KEY}&q=${city}`
         })
     }
 })();
