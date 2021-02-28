@@ -8,7 +8,7 @@ The code differs slightly from that found on the video (some slight refactoring 
 
 ## Useful links
 
-[Handling Failed HTTP Responses With fetch()](https://www.tjvantoll.com/2015/09/13/fetch-and-errors/)
-[fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
-[phin](https://www.npmjs.com/package/phin)
-[Window.localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
+- [Handling Failed HTTP Responses With fetch()](https://www.tjvantoll.com/2015/09/13/fetch-and-errors/)
+- [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+- [phin](https://www.npmjs.com/package/phin)
+- [Window.localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
