@@ -5,7 +5,7 @@ const content = document.querySelector('.content');
 const form = document.querySelector('.form');
 const formCityInput = form['city'];
 
-function createWeatherElement(condition, dayTime, temperature) {
+function createWeatherElement(condition, city, dayTime, temperature) {
     const weatherTemplate = document.querySelector('#weather-template').content.querySelector('.weather');
     const weatherElement = weatherTemplate.cloneNode(true);
 
@@ -14,12 +14,14 @@ function createWeatherElement(condition, dayTime, temperature) {
     const weatherTemperature = weatherElement.querySelector('.weather__temperature');
     const weatherText = weatherElement.querySelector('.weather__text');
 
-    toggleWeatherElement();
+    toggleWeatherElement(weatherElement);
 
-    weatherCity.textContent = formCityInput.value;
+    weatherCity.textContent = city || formCityInput.value;
     weatherDaytime.textContent = `Is it currently daytime? ${dayTime}`;
     weatherTemperature.textContent = `The temperature currently is: ${temperature} °F`;
     weatherText.textContent = `The condition is: ${condition}`;
+
+    return weatherElement;
 }
 
 /**
@@ -45,14 +47,14 @@ function getCityConditions(city) {
 
             return response.json();
         })
-        .then(data => content.append(createWeatherElement(data.weatherCondition, data.dayTime, data.temperature)))
+        .then(data => content.append(createWeatherElement(data.weatherCondition, city, data.dayTime, data.temperature)))
         .catch(error => console.log(error));
 }
 
 /**
  * Toggle `weatherElement` on/off.
  */
-function toggleWeatherElement() {
+function toggleWeatherElement(weatherElement) {
     if (weatherElement.classList.contains('.weather_is_displayed')) {
         weatherElement.classList.remove('.weather_is_displayed');
         return;
