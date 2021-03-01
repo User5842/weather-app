@@ -30,6 +30,18 @@ const createWeatherClient = (() => {
     }
 })();
 
+const handleBadResponse = (res, { statusCode, statusMessage }) => {
+    res
+        .status(statusCode)
+        .json({ message: statusMessage });
+}
+
+const handleException = (res, e) => {
+    res
+        .status(404)
+        .json({ message: e.message });
+};
+
 const isSuccessStatusCode = statusCode => statusCode >= 200 && statusCode <= 299;
 
 app.post('/weather', async (req, res) => {
@@ -40,32 +52,41 @@ app.post('/weather', async (req, res) => {
 
     const locationInformation = await p(createWeatherClient.getLocationKey(req.body.city));
     if (!isSuccessStatusCode(locationInformation.statusCode)) {
-        res
-            .status(locationInformation.statusCode)
-            .json({ message: locationInformation.statusMessage });
+        handleBadResponse(res, locationInformation);
         return;
     }
 
-    const locationKey = locationInformation.body[0].Key;
+    let locationKey;
+    try {
+        locationKey = locationInformation.body[0].Key;
+    } catch (e) {
+        handleException(res, e);
+        return;
+    }
     
     const citiesInformation = await p(createWeatherClient.getCityConditions(locationKey));
     if (!isSuccessStatusCode(citiesInformation.statusCode)) {
-        res
-            .status(locationInformation.statusCode)
-            .json({ message: locationInformation.statusMessage });
+        handleBadResponse(res, citiesInformation);
         return;
     }
 
-    const cityInformation = citiesInformation.body[0];
-    const { isDayTime, Temperature: { Imperial: { Value } }, WeatherText } = cityInformation;
+    let cityInformation;
+    try {
+        cityInformation = citiesInformation.body[0];
+    } catch (e) {
+        handleException(res, e);
+        return;
+    }
+
+    const { IsDayTime, Temperature: { Imperial: { Value } }, WeatherText } = cityInformation;
 
     res
         .status(200)
         .json({ 
-            dayTime: isDayTime ? 'Yes' : 'No',
+            dayTime: IsDayTime ? 'Yes' : 'No',
             temperature: Value,
             weatherCondition: WeatherText
         });
 });
 
-app.listen(3000, () => console.log('Listening...'));
+app.listen(port, () => console.log('Listening...'));
