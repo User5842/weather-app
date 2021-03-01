@@ -30,12 +30,22 @@ const createWeatherClient = (() => {
     }
 })();
 
+/**
+ * Helper method used to construct and handle a bad response.
+ * @param {Express.Response} res Response
+ * @param {statusCode: number, statusMessage: string} param Destructured IJSONResponse object
+ */
 const handleBadResponse = (res, { statusCode, statusMessage }) => {
     res
         .status(statusCode)
         .json({ message: statusMessage });
 }
 
+/**
+ * Helper method used to construct a handle an exception.
+ * @param {Express.Response} res Response
+ * @param {any} e Exception
+ */
 const handleException = (res, e) => {
     res
         .status(404)
